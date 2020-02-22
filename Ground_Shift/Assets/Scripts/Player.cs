@@ -5,15 +5,23 @@ public class Player : MonoBehaviour
 {
     [Header("移動速度"),Range(10,50)]
     public float speed = 10;
+    public LineRenderer lineRenderer;
 
     private Rigidbody rig;
+    Vector3 originalPosition;
+
     private void Start()
     {
         rig = gameObject.GetComponent<Rigidbody>();
+        lineRenderer = gameObject.GetComponent<LineRenderer>();
+        lineRenderer.widthMultiplier = 0.05f;
+        lineRenderer.positionCount = 2;
     }
 
     private void FixedUpdate()
     {
+        PlayerAim();
+        print(Input.mousePosition);
         if (GameManager.is3D)
         {
             MoveIn3D();
@@ -29,6 +37,9 @@ public class Player : MonoBehaviour
     /// </summary>
     private void MoveIn3D()
     {
+        //transform.position = new Vector3(transform.position.x, transform.position.y, originalPosition.z);
+        rig.constraints = RigidbodyConstraints.None;
+
         float H = Input.GetAxis("Horizontal");  //取得水平
         float V = Input.GetAxis("Vertical");   //取得前後
 
@@ -52,6 +63,9 @@ public class Player : MonoBehaviour
     /// </summary>
     private void MoveIn2D()
     {
+        transform.position = new Vector3(transform.position.x, transform.position.y, -6.5f);
+        rig.constraints = RigidbodyConstraints.FreezePositionZ;
+
         float H = Input.GetAxis("Horizontal");  //取得水平
         float V = Input.GetAxis("Vertical");   //取得前後
 
@@ -68,5 +82,13 @@ public class Player : MonoBehaviour
             //rig.AddForce(new Vector3(0, 100, 0));
             rig.velocity = new Vector3(0, 10, 0);
         }
+    }
+
+    private void PlayerAim()
+    {
+        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+        Vector3 playerPos = new Vector3(transform.position.x, transform.position.y, 0);
+        lineRenderer.SetPosition(0, playerPos);
+        lineRenderer.SetPosition(1, mousePos);
     }
 }
