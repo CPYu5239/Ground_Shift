@@ -18,7 +18,7 @@ public class Cube : MonoBehaviour
     {
         if (!GameManager.is3D)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, -6.5f);
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         }
         else
         {
