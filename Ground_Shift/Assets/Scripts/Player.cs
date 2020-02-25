@@ -3,16 +3,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [Header("移動速度"),Range(10,50)]
-    public float speed = 10;
-    public LineRenderer lineRenderer;
+    public PlayerData data;
+    public GameObject attackObject;
 
-    private Rigidbody rig;
-    Vector3 originalPosition;
+    GameManager gameManager;
+    LineRenderer lineRenderer;
+    Rigidbody rig;
+    Vector3 aimPoint;
+    public string gotoElement;
 
     private void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         rig = gameObject.GetComponent<Rigidbody>();
+        gameObject.AddComponent<LineRenderer>();
         lineRenderer = gameObject.GetComponent<LineRenderer>();
         lineRenderer.widthMultiplier = 0.025f;
         lineRenderer.positionCount = 2;
@@ -34,7 +38,16 @@ public class Player : MonoBehaviour
     private void Update()
     {
         PlayerAim();
-        //print(Input.mousePosition);
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            gameManager.ChangeElement(gotoElement);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.nowElement != "Default")
+        {
+            Attack();
+        }
     }
 
     /// <summary>
@@ -42,27 +55,14 @@ public class Player : MonoBehaviour
     /// </summary>
     private void MoveIn3D()
     {
-        //transform.position = new Vector3(transform.position.x, transform.position.y, originalPosition.z);
         rig.constraints = RigidbodyConstraints.FreezeRotation;
 
         float H = Input.GetAxis("Horizontal");  //取得水平
         float V = Input.GetAxis("Vertical");   //取得前後
 
-        if (H != 0 || V != 0)
+        if (Input.anyKey || Input.anyKeyDown)
         {
-            if (Input.GetKeyDown(KeyCode.V))  //衝刺
-            {
-                rig.velocity = new Vector3(V * speed * 10, 0, H * -speed * 10);
-            }
-            else  //一般移動
-            {
-                rig.velocity = new Vector3(V * speed, 0, H * -speed);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space)) //跳躍
-            {
-                rig.AddForce(new Vector3(0, 1000, 0));
-            }
+            rig.AddForce(new Vector3(V * data.moveSpeed, 0, -H * data.moveSpeed));
         }
     }
 
@@ -74,27 +74,42 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         rig.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
 
+
         float H = Input.GetAxis("Horizontal");  //取得水平
-        float V = Input.GetAxis("Vertical");   //取得前後
+        //float V = Input.GetAxis("Vertical");   //取得前後
 
-        if (H != 0 || V != 0)
+        if (Input.anyKey || Input.anyKeyDown)
         {
-            rig.AddForce(new Vector3(H * speed, 0, 0));
+            
+            rig.AddForce(new Vector3(H * data.moveSpeed, 0, 0));
 
-            //衝刺
-            if (Input.GetKeyDown(KeyCode.V))
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, -transform.up, out hit,1))
             {
-                rig.AddForce(new Vector3(H * speed * 1.5f, 0, 0));
+                if (hit.collider.gameObject.tag == "可站立物體")
+                {
+                    //衝刺
+                    if (Input.GetKeyDown(KeyCode.Mouse1))
+                    {
+                        print("衝刺");
+                        rig.AddForce(aimPoint * 250);
+                   }
+
+                   //跳躍
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        print("跳躍");
+                        rig.AddForce(new Vector3(0, 250, 0));
+                    }
+                }   
             }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                rig.AddForce(new Vector3(0, 100, 0));
-                //rig.velocity = new Vector3(0, 10, 0);
-            }        
         }
     }
 
+    /// <summary>
+    /// 角色瞄準
+    /// </summary>
     private void PlayerAim()
     {
 
@@ -105,12 +120,63 @@ public class Player : MonoBehaviour
         {
             lineRenderer.SetPosition(0, playerPos);
             lineRenderer.SetPosition(1, mousePos);
+            aimPoint = mousePos - playerPos;
         }
         else
         {
             Vector3 endPoint = Vector3.Lerp(playerPos, mousePos, 2f/ Vector3.Distance(mousePos, playerPos));
             lineRenderer.SetPosition(0, playerPos);
             lineRenderer.SetPosition(1, endPoint);
+            aimPoint = endPoint - playerPos;
         }
+    }
+
+    /// <summary>
+    /// 畫線判斷是否在地板
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+
+        //transform.forward,right,up 可以抓取物件的前方,右方跟上方(反向加-號)
+        //繪製射線 (中心點,方向)
+        Gizmos.DrawRay(transform.position, -transform.up);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        gotoElement = collision.collider.tag;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        gotoElement = "Default";
+    }
+
+    /// <summary>
+    /// 攻擊方法
+    /// </summary>
+    private void Attack()
+    {
+        data.energy -= 5;
+        GameObject weapon = Instantiate(attackObject,gameObject.transform.position,Quaternion.identity);
+        weapon.GetComponent<Rigidbody>().AddForce(aimPoint * 500);
+    }
+
+    /// <summary>
+    /// 受傷方法
+    /// </summary>
+    /// <param name="damage">受到的傷害值</param>
+    private void Hit(int damage)
+    {
+        data.hp -= damage;
+    }
+
+    /// <summary>
+    /// 死亡方法
+    /// </summary>
+    private void Death()
+    {
+
     }
 }

@@ -3,20 +3,19 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour
 {
-    private Transform player;
-
-    private void Start()
-    {
-        player = GameObject.Find("玩家").GetComponent<Transform>();
-    }
+    Transform player;
 
     private void LateUpdate()
     {
         Track();
     }
 
+    /// <summary>
+    /// 攝影機追蹤
+    /// </summary>
     private void Track()
     {
+        player = GameManager.player.transform;
         Vector3 pos = player.position;
         Vector3 posCam = transform.position;
 
@@ -30,4 +29,26 @@ public class CameraControl : MonoBehaviour
         }
     }
 
+    /*private IEnumerator AnimationTime()
+    {
+        enabled = false;
+        yield return new WaitForSeconds(1);
+        enabled = true;
+    }*/
+
+    /*private IEnumerator CameraSwitch()
+    {
+        Vector3 newPos = new Vector3(transform.position.x - 25, transform.position.y + 14.5f, transform.position.z + 15);
+        for (int i = 0; i >= 0; i++)
+        {
+            transform.position = Vector3.Lerp(transform.position, newPos, 0.1f);
+            yield return new WaitForSeconds(0.1f);
+            if (transform.position == newPos)
+            {                
+                GameManager.is3D = true;
+                break;
+            }
+        }
+        //transform.position = newPos;
+    }*/
 }

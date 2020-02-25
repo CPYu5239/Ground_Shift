@@ -14276,6 +14276,7 @@ GameObject:
   - component: {fileID: 5262323838173527170}
   - component: {fileID: 172716389321219838}
   - component: {fileID: 7867384903960048360}
+  - component: {fileID: 3625381133174147176}
   m_Layer: 0
   m_Name: Default ball
   m_TagString: Untagged
@@ -19097,6 +19098,27 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.4962287
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3625381133174147176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3038967052487634040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41099bbe4b214984b8325a282c86482d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: ee3b0a81ce4a342f5884f05316465072, type: 2}
+  defaultBall: {fileID: 3038967052487634040}
+  waterBall: {fileID: 2298013245888473203, guid: 0b1b4103c82d02f49a3b9f2922fbfda2,
+    type: 3}
+  fireBall: {fileID: 5924760180737116641, guid: 73429810d4235fe4e88db8b2de2e94e8,
+    type: 3}
+  iceBall: {fileID: 5754061259418122052, guid: c4361d5fd89b33d41970f2c5a165f29d, type: 3}
+  earthBall: {fileID: 6654149187680400676, guid: 375954a8ad456544da7aa7637dc4982c,
+    type: 3}
 --- !u!1 &4641215670160971347
 GameObject:
   m_ObjectHideFlags: 0

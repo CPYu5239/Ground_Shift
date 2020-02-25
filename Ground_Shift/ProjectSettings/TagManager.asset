@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - "\u53EF\u7AD9\u7ACB\u7269\u9AD4"
+  - Water
   layers:
   - Default
   - TransparentFX
