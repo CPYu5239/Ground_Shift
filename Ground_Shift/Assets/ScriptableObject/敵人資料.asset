@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1b0bd88ab65d4e08ab150456558506c, type: 3}
   m_Name: "\u6575\u4EBA\u8CC7\u6599"
   m_EditorClassIdentifier: 
-  moveSpeed: 15
+  moveSpeed: 1
   hp: 100
   maxHp: 100
-  attackCD: 5
-  attackRange: 50
+  attack: 15
+  attackCD: 2.5
+  attackRange: 2
+  attackDelay: 0.5
+  detectRange: 8

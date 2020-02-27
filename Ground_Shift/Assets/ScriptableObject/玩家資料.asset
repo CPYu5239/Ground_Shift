@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: "\u73A9\u5BB6\u8CC7\u6599"
   m_EditorClassIdentifier: 
   moveSpeed: 15
-  hp: 100
+  hp: 300
   maxHp: 100
+  attack: 30
+  shootAttack: 30
+  battery: 50.4
+  maxBattery: 50
   energy: 50.23899
   maxEnergy: 50
-  elementEnergy: 100
-  maxElementEnergy: 100

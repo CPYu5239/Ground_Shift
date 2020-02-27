@@ -28,27 +28,4 @@ public class CameraControl : MonoBehaviour
             transform.position = new Vector3(pos.x, posCam.y, posCam.z);
         }
     }
-
-    /*private IEnumerator AnimationTime()
-    {
-        enabled = false;
-        yield return new WaitForSeconds(1);
-        enabled = true;
-    }*/
-
-    /*private IEnumerator CameraSwitch()
-    {
-        Vector3 newPos = new Vector3(transform.position.x - 25, transform.position.y + 14.5f, transform.position.z + 15);
-        for (int i = 0; i >= 0; i++)
-        {
-            transform.position = Vector3.Lerp(transform.position, newPos, 0.1f);
-            yield return new WaitForSeconds(0.1f);
-            if (transform.position == newPos)
-            {                
-                GameManager.is3D = true;
-                break;
-            }
-        }
-        //transform.position = newPos;
-    }*/
 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -6153552904993715373}
   m_Layer: 0
   m_Name: Water ball
-  m_TagString: Untagged
+  m_TagString: "\u73A9\u5BB6"
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4798,3 +4798,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: ee3b0a81ce4a342f5884f05316465072, type: 2}
+  attackObject: {fileID: 0}
+  isDash: 0
+  gotoElement: 

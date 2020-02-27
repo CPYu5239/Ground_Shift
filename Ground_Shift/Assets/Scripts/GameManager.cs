@@ -69,11 +69,13 @@ public class GameManager : MonoBehaviour
         {
             originalPos = player.transform.position;
             ani.SetTrigger("Switch2D");
+            ani.SetBool("is3D", false);
             is3D = false;
         }
         else
         {
             ani.SetTrigger("Switch3D");
+            ani.SetBool("is3D", true);
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, originalPos.z);
             is3D = true;
         }

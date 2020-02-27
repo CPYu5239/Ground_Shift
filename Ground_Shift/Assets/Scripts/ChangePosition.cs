@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Cube : MonoBehaviour
+public class ChangePosition : MonoBehaviour
 {
     Vector3 originalPosition;
 
@@ -9,6 +9,7 @@ public class Cube : MonoBehaviour
     {
         originalPosition = transform.position;
     }
+
     private void Update()
     {
         FreezePosition();
@@ -18,7 +19,7 @@ public class Cube : MonoBehaviour
     {
         if (!GameManager.is3D)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+            transform.position = new Vector3(transform.position.x, transform.position.y, GameManager.player.transform.position.z);
         }
         else
         {

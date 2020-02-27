@@ -5,12 +5,13 @@ public class Player : MonoBehaviour
 {
     public PlayerData data;
     public GameObject attackObject;
+    public bool isDash;           //是否在衝刺
 
     GameManager gameManager;
     LineRenderer lineRenderer;
     Rigidbody rig;
     Vector3 aimPoint;
-    public string gotoElement;
+    public string gotoElement;    //要變成的玩素
 
     private void Start()
     {
@@ -39,15 +40,47 @@ public class Player : MonoBehaviour
     {
         PlayerAim();
 
+        print("isDash=" + isDash);
         if (Input.GetKeyDown(KeyCode.F))
         {
             gameManager.ChangeElement(gotoElement);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            isDash = true;
+            StartCoroutine(NoDash());
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && GameManager.nowElement != "Default")
         {
             Attack();
         }
+
+        if (data.hp <= 0)
+        {
+            Death();
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "敵人" && isDash)
+        {
+            isDash = false;
+            Hit(10); //用衝次攻擊時自己也會受到損傷
+            collision.gameObject.GetComponent<Enemy>().Hit(data.attack);
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        gotoElement = collision.collider.tag;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        gotoElement = "Default";
     }
 
     /// <summary>
@@ -143,16 +176,6 @@ public class Player : MonoBehaviour
         Gizmos.DrawRay(transform.position, -transform.up);
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
-        gotoElement = collision.collider.tag;
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        gotoElement = "Default";
-    }
-
     /// <summary>
     /// 攻擊方法
     /// </summary>
@@ -167,9 +190,9 @@ public class Player : MonoBehaviour
     /// 受傷方法
     /// </summary>
     /// <param name="damage">受到的傷害值</param>
-    private void Hit(int damage)
+    public void Hit(float damage)
     {
-        data.hp -= damage;
+        data.hp -= (int)damage;
     }
 
     /// <summary>
@@ -177,6 +200,16 @@ public class Player : MonoBehaviour
     /// </summary>
     private void Death()
     {
+        Destroy(gameObject);
+    }
 
+    /// <summary>
+    /// 收回衝刺狀態
+    /// </summary>
+    /// <returns>1秒後沒有衝次狀態</returns>
+    private IEnumerator NoDash()
+    {
+        yield return new WaitForSeconds(1F);
+        isDash = false;
     }
 }
